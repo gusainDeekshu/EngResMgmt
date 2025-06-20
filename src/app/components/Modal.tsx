@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogClose } from "@/components/ui/dialog";
 
 interface ModalProps {
   open: boolean;
@@ -8,20 +9,17 @@ interface ModalProps {
 }
 
 export default function Modal({ open, onClose, title, children }: ModalProps) {
-  if (!open) return null;
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30">
-      <div className="bg-white rounded-xl shadow-lg p-6 w-full max-w-lg relative">
-        <button
-          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
-          onClick={onClose}
-          aria-label="Close"
-        >
-          &times;
-        </button>
-        {title && <h3 className="text-lg font-bold mb-4">{title}</h3>}
+    <Dialog open={open} onOpenChange={v => { if (!v) onClose(); }}>
+      <DialogContent>
+        <DialogHeader>
+          {title && <DialogTitle>{title}</DialogTitle>}
+        </DialogHeader>
         {children}
-      </div>
-    </div>
+        <DialogClose asChild>
+          <button aria-label="Close" style={{ display: 'none' }} />
+        </DialogClose>
+      </DialogContent>
+    </Dialog>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useAuth } from "./AuthProvider";
+import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { name: "Dashboard", href: "/dashboard" },
@@ -26,12 +27,13 @@ export default function Sidebar() {
         ))}
       </nav>
       {user && (
-        <button
-          className="mt-8 bg-red-50 text-red-700 px-4 py-2 rounded-lg hover:bg-red-100 font-medium"
+        <Button
+          variant="destructive"
+          className="mt-8 w-full"
           onClick={logout}
         >
           Logout
-        </button>
+        </Button>
       )}
       <div className="mt-auto pt-8 border-t border-gray-100 text-xs text-gray-400">
         &copy; {new Date().getFullYear()} EngResMgmt

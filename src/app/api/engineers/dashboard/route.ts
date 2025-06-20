@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const user = await User.findById(payload.id);
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    const assignments = await Assignment.find({ engineerId: user._id }).populate("projectId", "name");
+    const assignments = await Assignment.find({ engineerId: user._id });
 
     const now = new Date();
     const activeAssignments = assignments.filter(a => {
@@ -27,7 +27,7 @@ export async function GET(req: NextRequest) {
     });
 
     const utilization = activeAssignments.reduce((acc, a) => acc + a.allocationPercentage, 0);
-    const projectsCount = new Set(activeAssignments.map(a => a.projectId._id.toString())).size;
+    const projectsCount = new Set(activeAssignments.map(a => a.projectId.toString())).size;
     
     let nextFreeDate = now.toISOString().split("T")[0];
     if (activeAssignments.length > 0) {
@@ -36,11 +36,30 @@ export async function GET(req: NextRequest) {
       nextFreeDate = latestEndDate.toISOString().split("T")[0];
     }
 
+    // Get assignments for the current month
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+
+    const assignmentsThisMonth = await Assignment.find({
+      startDate: { $lte: monthEnd },
+      endDate: { $gte: monthStart },
+    });
+
+    const assignmentsForWidget = assignmentsThisMonth.map(a => ({
+      _id: a._id,
+      start: a.startDate,
+      end: a.endDate,
+      project: a.projectId, // just return the ObjectId or string
+      role: a.role,
+      allocation: a.allocationPercentage,
+    }));
+
     return NextResponse.json({
       utilization,
       projectsCount,
       nextFreeDate,
       assignments,
+      assignmentsForWidget,
     });
   } catch (error) {
     if (error instanceof jwt.JsonWebTokenError) {
@@ -49,4 +68,4 @@ export async function GET(req: NextRequest) {
     console.error(error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
-} 
+}

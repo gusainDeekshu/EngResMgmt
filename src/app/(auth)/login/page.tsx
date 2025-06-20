@@ -1,6 +1,8 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -40,29 +42,27 @@ export default function LoginPage() {
       <form className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm flex flex-col gap-4" onSubmit={handleSubmit}>
         <h2 className="text-2xl font-bold mb-2">Sign In</h2>
         {error && <div className="text-red-600 text-sm">{error}</div>}
-        <input
-          className="border rounded px-3 py-2"
+        <Input
           type="email"
           placeholder="Email"
           value={email}
           onChange={e => setEmail(e.target.value)}
           required
         />
-        <input
-          className="border rounded px-3 py-2"
+        <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={e => setPassword(e.target.value)}
           required
         />
-        <button
+        <Button
           type="submit"
-          className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 disabled:opacity-50"
+          className="bg-indigo-600 text-white hover:bg-indigo-700 disabled:opacity-50"
           disabled={loading}
         >
           {loading ? "Signing in..." : "Sign In"}
-        </button>
+        </Button>
       </form>
     </div>
   );

@@ -68,12 +68,34 @@ export async function GET(req: NextRequest) {
       };
     });
 
+    // 5. Assignments for the current month (for CalendarWidget)
+    const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
+    const assignmentsThisMonth = await Assignment.find({
+      startDate: { $lte: monthEnd },
+      endDate: { $gte: monthStart },
+    });
+    // Manual join for project names
+    const projectIds = assignmentsThisMonth.map(a => a.projectId.toString());
+    const uniqueProjectIds = [...new Set(projectIds)];
+    const projects = await Project.find({ _id: { $in: uniqueProjectIds } }, { name: 1 });
+    const projectMap = Object.fromEntries(projects.map((p) => [p._id?.toString?.(), p.name]));
+    const assignmentsForWidget = assignmentsThisMonth.map(a => ({
+      _id: a._id,
+      start: a.startDate,
+      end: a.endDate,
+      project: projectMap[a.projectId.toString()] || "Unknown",
+      role: a.role,
+      allocation: a.allocationPercentage,
+    }));
+
     return NextResponse.json({
       totalEngineers,
       activeProjectsCount,
       averageUtilization,
       nextAvailability: soonestNextAvailability ? soonestNextAvailability.toISOString().split("T")[0] : null,
-      engineers: engineersWithUtilization
+      engineers: engineersWithUtilization,
+      assignments: assignmentsForWidget,
     });
 
   } catch (error) {

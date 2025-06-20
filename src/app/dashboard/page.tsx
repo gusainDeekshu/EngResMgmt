@@ -2,9 +2,11 @@
 import { useState, useEffect } from "react";
 import StatCardsRow from "../components/StatCardsRow";
 import EngineerCard from "../components/EngineerCard";
-import CalendarWidget from "../components/CalendarWidget";
+// 1. IMPORT THE NEW CALENDAR COMPONENT
+import { AssignmentsCalendar } from "../components/AssignmentsCalendar"; // Adjust path if needed
 import ProtectedRoute from "../components/ProtectedRoute";
 import { get } from "@/lib/api";
+import { Card } from "@/components/ui/card";
 
 export default function DashboardPage() {
   const [data, setData] = useState<any>(null);
@@ -29,6 +31,7 @@ export default function DashboardPage() {
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
+  // No changes here
   const stats = [
     { label: "Total Engineers", value: data.totalEngineers, icon: "👩‍💻" },
     { label: "Active Projects", value: data.activeProjectsCount, icon: "📁" },
@@ -49,12 +52,14 @@ export default function DashboardPage() {
               ))}
             </div>
           </div>
-          <div className="flex flex-col gap-4">
-            <div className="text-lg font-semibold mb-2">Upcoming Assignments</div>
-            <CalendarWidget assignments={data.assignments} />
+          {/* Change is in this Card component */}
+          <div className="flex flex-col gap-4 p-0"> {/* Adjusted padding to p-0 as the calendar has its own */}
+            <div className="p-4 pb-0 text-lg font-semibold">Upcoming Assignments</div>
+            {/* 2. USE THE NEW COMPONENT and pass the same assignments prop */}
+            <AssignmentsCalendar assignments={data.assignments} />
           </div>
         </div>
       </div>
     </ProtectedRoute>
   );
-} 
+}

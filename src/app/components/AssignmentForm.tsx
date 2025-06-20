@@ -1,7 +1,9 @@
 "use client";
 import { useForm } from "react-hook-form";
-import Card from "./Card";
 import { useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function AssignmentForm({
   onSubmit,
@@ -20,6 +22,7 @@ export default function AssignmentForm({
     formState: { errors, isSubmitting },
     watch,
     reset,
+    setValue,
   } = useForm({
     defaultValues: initial || {
       projectId: "",
@@ -41,47 +44,65 @@ export default function AssignmentForm({
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label className="block text-sm font-medium mb-1">Project</label>
-        <select className="w-full border rounded px-3 py-2" {...register("projectId", { required: true })}>
-          <option value="">Select project</option>
-          {projects.map((p) => (
-            <option key={p._id} value={p._id}>{p.name}</option>
-          ))}
-        </select>
+        <Select
+          onValueChange={val => setValue("projectId", val)}
+          defaultValue={initial?.projectId || ""}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select project" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Select project</SelectItem>
+            {projects.map((p: any) => (
+              <SelectItem key={p._id} value={p._id}>{p.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <input type="hidden" {...register("projectId", { required: true })} />
         {errors.projectId && <span className="text-xs text-red-500">Project is required</span>}
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Engineer</label>
-        <select className="w-full border rounded px-3 py-2" {...register("engineerId", { required: true })}>
-          <option value="">Select engineer</option>
-          {engineers.map((e) => (
-            <option key={e._id} value={e._id}>{e.name}</option>
-          ))}
-        </select>
+        <Select
+          onValueChange={val => setValue("engineerId", val)}
+          defaultValue={initial?.engineerId || ""}
+        >
+          <SelectTrigger>
+            <SelectValue placeholder="Select engineer" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="">Select engineer</SelectItem>
+            {engineers.map((e: any) => (
+              <SelectItem key={e._id} value={e._id}>{e.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <input type="hidden" {...register("engineerId", { required: true })} />
         {errors.engineerId && <span className="text-xs text-red-500">Engineer is required</span>}
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Allocation %</label>
-        <input type="number" min={0} max={100} className="w-full border rounded px-3 py-2" {...register("allocation", { required: true, min: 0, max: 100 })} />
+        <Input type="number" min={0} max={100} {...register("allocation", { required: true, min: 0, max: 100 })} />
         {errors.allocation && <span className="text-xs text-red-500">0-100 required</span>}
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Role</label>
-        <input className="w-full border rounded px-3 py-2" {...register("role", { required: true })} />
+        <Input {...register("role", { required: true })} />
         {errors.role && <span className="text-xs text-red-500">Role is required</span>}
       </div>
       <div className="flex gap-2">
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Start Date</label>
-          <input type="date" className="w-full border rounded px-3 py-2" {...register("start", { required: true })} />
+          <Input type="date" {...register("start", { required: true })} />
         </div>
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1">End Date</label>
-          <input type="date" className="w-full border rounded px-3 py-2" {...register("end", { required: true })} />
+          <Input type="date" {...register("end", { required: true })} />
         </div>
       </div>
-      <button type="submit" className="mt-4 bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700 disabled:opacity-50" disabled={isSubmitting}>
+      <Button type="submit" className="mt-4" disabled={isSubmitting}>
         {isSubmitting ? "Saving..." : "Save Assignment"}
-      </button>
+      </Button>
     </form>
   );
 } 

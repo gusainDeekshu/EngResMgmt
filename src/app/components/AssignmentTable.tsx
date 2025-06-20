@@ -1,4 +1,5 @@
-import Card from "./Card";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Assignment {
   project: string;
@@ -42,14 +43,14 @@ export default function AssignmentTable({ assignments, onEdit, onDelete }: Assig
               {(onEdit || onDelete) && (
                 <td className="px-4 py-2 flex gap-2">
                   {onEdit && (
-                    <button className="text-indigo-600 hover:underline" onClick={() => onEdit(i)}>
+                    <Button variant="ghost" className="text-indigo-600 px-2 py-1 h-auto" onClick={() => onEdit(i)}>
                       Edit
-                    </button>
+                    </Button>
                   )}
                   {onDelete && (
-                    <button className="text-red-600 hover:underline" onClick={() => onDelete(i)}>
+                    <Button variant="ghost" className="text-red-600 px-2 py-1 h-auto" onClick={() => onDelete(i)}>
                       Delete
-                    </button>
+                    </Button>
                   )}
                 </td>
               )}
