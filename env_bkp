@@ -1,0 +1,2 @@
+NEXT_PUBLIC_MONGODB_TOKEN="mongodb+srv://geekyant:geekyant@cluster0.zqz7q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+NEXT_PUBLIC_JWT_SECRET="befeujhgierbbhbdvj"
