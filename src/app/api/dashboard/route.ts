@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { connectToDatabase } from "@/lib/db";
+import "@/models/User";      // just registers
+import "@/models/Project";   // just registers
+import  "@/models/Assignment"; // the one you're using
 import Project from "@/models/Project";
 import User from "@/models/User";
 import Assignment from "@/models/Assignment";
+
 
 const JWT_SECRET = process.env.JWT_SECRET || "changeme";
 
@@ -65,28 +69,37 @@ export async function GET(req: NextRequest) {
         skills: engineer.skills,
         percent: utilization,
         img: (engineer as any)?.img || null,
+        seniority: engineer.seniority,
       };
     });
 
-    // 5. Assignments for the current month (for CalendarWidget)
+    // 5. Assignments for the current month (for CalendarWidget and Timeline)
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
     const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59, 999);
     const assignmentsThisMonth = await Assignment.find({
       startDate: { $lte: monthEnd },
       endDate: { $gte: monthStart },
-    });
-    // Manual join for project names
-    const projectIds = assignmentsThisMonth.map(a => a.projectId.toString());
-    const uniqueProjectIds = [...new Set(projectIds)];
-    const projects = await Project.find({ _id: { $in: uniqueProjectIds } }, { name: 1 });
-    const projectMap = Object.fromEntries(projects.map((p) => [p._id?.toString?.(), p.name]));
+    })
+      .populate({ path: 'engineerId', select: 'name skills seniority department' })
+      .populate({ path: 'projectId', select: 'name status' });
+
     const assignmentsForWidget = assignmentsThisMonth.map(a => ({
       _id: a._id,
       start: a.startDate,
       end: a.endDate,
-      project: projectMap[a.projectId.toString()] || "Unknown",
+      project: typeof a.projectId === 'object' && a.projectId !== null && 'name' in a.projectId ? a.projectId.name : "Unknown",
+      projectStatus: typeof a.projectId === 'object' && a.projectId !== null && 'status' in a.projectId ? a.projectId.status : "",
       role: a.role,
+      seniority: a.seniority,
       allocation: a.allocationPercentage,
+      engineerId: typeof a.engineerId === 'object' && a.engineerId !== null && '_id' in a.engineerId ? a.engineerId._id : a.engineerId,
+      engineerName: typeof a.engineerId === 'object' && a.engineerId !== null && 'name' in a.engineerId ? a.engineerId.name : "",
+      engineerSkills: typeof a.engineerId === 'object' && a.engineerId !== null && 'skills' in a.engineerId ? a.engineerId.skills : [],
+      engineerSeniority: typeof a.engineerId === 'object' && a.engineerId !== null && 'seniority' in a.engineerId ? a.engineerId.seniority : "",
+      engineerDepartment: typeof a.engineerId === 'object' && a.engineerId !== null && 'department' in a.engineerId ? a.engineerId.department : "",
+      engineerAvatar: typeof a.engineerId === 'object' && a.engineerId !== null && 'img' in a.engineerId ? a.engineerId.img : null,
+      projectId: typeof a.projectId === 'object' && a.projectId !== null && '_id' in a.projectId ? a.projectId._id : a.projectId,
+      isTentative: typeof (a as any).isTentative !== 'undefined' ? (a as any).isTentative : false,
     }));
 
     return NextResponse.json({
@@ -107,7 +120,7 @@ export async function GET(req: NextRequest) {
   }
 }
 
-function isSameDay(d1, d2) {
+function isSameDay(d1: Date, d2: Date) {
   return d1.getFullYear() === d2.getFullYear() &&
          d1.getMonth() === d2.getMonth() &&
          d1.getDate() === d2.getDate();
@@ -119,12 +132,4 @@ function isDateInRange(date: Date, start: Date, end: Date) {
   const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
   const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
   return s <= d && d <= e;
-}
-
-function getAssignmentsForDate(date: Date) {
-  return assignments.filter(a => {
-    const start = new Date(a.start);
-    const end = new Date(a.end);
-    return isDateInRange(date, start, end);
-  });
 } 

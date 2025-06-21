@@ -4,7 +4,9 @@ import { GeistMono } from "geist/font/mono";
 import "./globals.css";
 import { AuthProvider } from "./components/AuthProvider";
 import Sidebar from "./components/Sidebar";
+import EngineerSidebar from "./components/EngineerSidebar";
 import { Toaster } from "sonner";
+import { SidebarWrapper } from "./components/SidebarWrapper";
 
 export const metadata: Metadata = {
   title: "Engineering Resource Management",
@@ -24,7 +26,7 @@ export default function RootLayout({
         <Toaster />
         <AuthProvider>
           <div className="min-h-screen flex">
-            <Sidebar />
+            <SidebarWrapper />
             <main className="flex-1 p-8 overflow-y-auto">{children}</main>
           </div>
         </AuthProvider>

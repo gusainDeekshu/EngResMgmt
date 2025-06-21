@@ -28,7 +28,7 @@ export default function AssignmentTable({ assignments, onEdit, onDelete }: Assig
             <th className="px-4 py-2 text-left font-semibold">Role</th>
             <th className="px-4 py-2 text-left font-semibold">Start</th>
             <th className="px-4 py-2 text-left font-semibold">End</th>
-            {(onEdit || onDelete) && <th className="px-4 py-2"></th>}
+            {(onEdit || onDelete) && <th className="px-4 py-2">Action</th>}
           </tr>
         </thead>
         <tbody>

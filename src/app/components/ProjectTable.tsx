@@ -29,7 +29,7 @@ export default function ProjectTable({ projects, onEdit, onDelete }: ProjectTabl
             <th className="px-4 py-2 text-left font-semibold">Status</th>
             <th className="px-4 py-2 text-left font-semibold">Required Skills</th>
             <th className="px-4 py-2 text-left font-semibold">Team Size</th>
-            {(onEdit || onDelete) && <th className="px-4 py-2"></th>}
+            {(onEdit || onDelete) && <th className="px-4 py-2">Action</th>}
           </tr>
         </thead>
         <tbody>

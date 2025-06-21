@@ -25,7 +25,8 @@ const ProjectSchema: Schema = new Schema({
   requiredSkills: [{ type: String }],
   teamSize: { type: Number },
   status: { type: String, enum: ['planning', 'active', 'completed'], default: 'planning' },
-  managerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+  managerId: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
-export default (mongoose.models.Project as Model<IProject>) || mongoose.model<IProject>('Project', ProjectSchema); 
+const ProjectModel = mongoose.models.projects || mongoose.model("projects", ProjectSchema);
+export default ProjectModel;

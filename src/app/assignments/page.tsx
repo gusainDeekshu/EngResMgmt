@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import AssignmentTable from "../components/AssignmentTable";
 import Modal from "../components/Modal";
 import AssignmentForm from "../components/AssignmentForm";
+import ConfirmDialog from "../components/ConfirmDialog";
 import { get, post, put, del } from "@/lib/api";
 import ProtectedRoute from "../components/ProtectedRoute";
 
@@ -16,6 +17,8 @@ export default function AssignmentsPage() {
   const [engineers, setEngineers] = useState<any[]>([]);
   const [assignmentIds, setAssignmentIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [assignmentToDelete, setAssignmentToDelete] = useState<{ index: number; details: string } | null>(null);
 
   async function fetchInitialData() {
     setLoading(true);
@@ -94,8 +97,18 @@ export default function AssignmentsPage() {
   };
 
   const handleDelete = async (index: number) => {
-    if (!window.confirm("Delete this assignment?")) return;
+    const assignment = assignments[index];
+    const details = `${assignment.engineer} → ${assignment.project} (${assignment.role})`;
+    setAssignmentToDelete({ index, details });
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!assignmentToDelete) return;
+    
+    const { index } = assignmentToDelete;
     const id = assignmentIds[index];
+    
     try {
       await del(`/api/assignments/${id}`);
       toast.success("Assignment deleted successfully");
@@ -139,6 +152,16 @@ export default function AssignmentsPage() {
             engineers={engineers}
           />
         </Modal>
+        <ConfirmDialog
+          open={deleteDialogOpen}
+          onOpenChange={setDeleteDialogOpen}
+          title="Delete Assignment"
+          description={`Are you sure you want to delete this assignment?\n\n${assignmentToDelete?.details}\n\nThis action cannot be undone.`}
+          confirmText="Delete Assignment"
+          cancelText="Cancel"
+          onConfirm={confirmDelete}
+          variant="destructive"
+        />
       </div>
     </ProtectedRoute>
   );

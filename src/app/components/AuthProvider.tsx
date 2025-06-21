@@ -12,6 +12,7 @@ interface User {
 interface AuthContextType {
   user: User | null;
   token: string | null;
+  loading: boolean;
   login: (user: User, token: string) => void;
   logout: () => void;
 }
@@ -21,15 +22,44 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    const storedToken = localStorage.getItem("token");
-    if (storedUser && storedToken) {
-      setUser(JSON.parse(storedUser));
-      setToken(storedToken);
-    }
+    const initializeAuth = async () => {
+      try {
+        const storedUser = localStorage.getItem("user");
+        const storedToken = localStorage.getItem("token");
+        
+        if (storedUser && storedToken) {
+          // Validate token with backend
+          const response = await fetch("/api/auth/profile", {
+            headers: {
+              Authorization: `Bearer ${storedToken}`,
+            },
+          });
+          
+          if (response.ok) {
+            const userData = JSON.parse(storedUser);
+            setUser(userData);
+            setToken(storedToken);
+          } else {
+            // Token is invalid, clear storage
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+          }
+        }
+      } catch (error) {
+        console.error("Auth initialization error:", error);
+        // Clear invalid data
+        localStorage.removeItem("user");
+        localStorage.removeItem("token");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    initializeAuth();
   }, []);
 
   const login = (user: User, token: string) => {
@@ -48,7 +78,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ user, token, loading, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

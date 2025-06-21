@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
     const user = await User.findById(payload.id);
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
-    const assignments = await Assignment.find({ engineerId: user._id });
+    const assignments = await Assignment.find({ engineerId: user._id }).populate("projectId");
 
     const now = new Date();
     const activeAssignments = assignments.filter(a => {
@@ -27,6 +27,10 @@ export async function GET(req: NextRequest) {
     });
 
     const utilization = activeAssignments.reduce((acc, a) => acc + a.allocationPercentage, 0);
+    
+    // Use the user's maxCapacity from the User schema
+    const maxUtilization = user.maxCapacity || 0;
+    
     const projectsCount = new Set(activeAssignments.map(a => a.projectId.toString())).size;
     
     let nextFreeDate = now.toISOString().split("T")[0];
@@ -53,9 +57,11 @@ export async function GET(req: NextRequest) {
       role: a.role,
       allocation: a.allocationPercentage,
     }));
+    console.log(maxUtilization,"maxUtilization");
 
     return NextResponse.json({
       utilization,
+      maxUtilization,
       projectsCount,
       nextFreeDate,
       assignments,

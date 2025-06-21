@@ -52,7 +52,6 @@ export default function AssignmentForm({
             <SelectValue placeholder="Select project" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Select project</SelectItem>
             {projects.map((p: any) => (
               <SelectItem key={p._id} value={p._id}>{p.name}</SelectItem>
             ))}
@@ -71,7 +70,6 @@ export default function AssignmentForm({
             <SelectValue placeholder="Select engineer" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">Select engineer</SelectItem>
             {engineers.map((e: any) => (
               <SelectItem key={e._id} value={e._id}>{e.name}</SelectItem>
             ))}

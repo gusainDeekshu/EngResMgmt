@@ -1,7 +1,6 @@
-import mongoose, { Schema, Document, Model, Types } from 'mongoose';
-import Project from "@/models/Project";
+import mongoose, { Schema, Types } from "mongoose";
 
-export interface IAssignment extends Document {
+export interface AssignmentData {
   engineerId: Types.ObjectId;
   projectId: Types.ObjectId;
   allocationPercentage: number;
@@ -10,13 +9,30 @@ export interface IAssignment extends Document {
   role: string;
 }
 
-const AssignmentSchema: Schema = new Schema({
-  engineerId: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-  projectId: { type: Schema.Types.ObjectId, ref: 'Project', required: true },
-  allocationPercentage: { type: Number, required: true },
-  startDate: { type: Date, required: true },
-  endDate: { type: Date, required: true },
-  role: { type: String, required: true },
-});
+const AssignmentSchema: Schema<AssignmentData> = new Schema(
+  {
+    engineerId: {
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
+      ref: "projects",
+      required: true,
+    },
+    allocationPercentage: { type: Number, required: true },
+    startDate: { type: Date, required: true },
+    endDate: { type: Date, required: true },
+    role: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+    minimize: false,
+  }
+);
 
-export default (mongoose.models.Assignment as Model<IAssignment>) || mongoose.model<IAssignment>('Assignment', AssignmentSchema); 
+const AssignmentModel =
+  mongoose.models.assignments || mongoose.model("assignments", AssignmentSchema);
+
+export default AssignmentModel;

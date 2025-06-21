@@ -51,7 +51,7 @@ body {
 
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
+  --background: #FFFFFF;
   --foreground: oklch(0.13 0.028 261.692);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.13 0.028 261.692);
@@ -138,3 +138,14 @@ body {
   @apply bg-accent;
 }
 
+
+
+::-webkit-scrollbar{
+  height: 4px;
+  width: 4px;
+}
+::-webkit-scrollbar-thumb:horizontal{
+          background: gray;
+
+  border-radius: 10px;
+}
