@@ -13,7 +13,7 @@ export async function GET(req: NextRequest) {
     if (!auth) return NextResponse.json({ error: "No token" }, { status: 401 });
     const token = auth.replace("Bearer ", "");
 
-    const payload = jwt.verify(token, JWT_SECRET) as any;
+    const payload = jwt.verify(token, JWT_SECRET) as { id: string };
     const user = await User.findById(payload.id);
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 

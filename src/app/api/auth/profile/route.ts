@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
   if (!auth) return NextResponse.json({ error: "No token" }, { status: 401 });
   const token = auth.replace("Bearer ", "");
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as any;
+    const payload = jwt.verify(token, JWT_SECRET) as { id: string };
     const user = await User.findById(payload.id).select("-password");
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
     return NextResponse.json({ user });
@@ -27,7 +27,7 @@ export async function PUT(req: NextRequest) {
   
   const token = auth.replace("Bearer ", "");
   try {
-    const payload = jwt.verify(token, JWT_SECRET) as any;
+    const payload = jwt.verify(token, JWT_SECRET) as { id: string };
     const user = await User.findById(payload.id);
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
     

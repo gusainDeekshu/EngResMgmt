@@ -4,7 +4,6 @@ import { connectToDatabase } from "@/lib/db";
 import "@/models/User";      // just registers
 import "@/models/Project";   // just registers
 import  "@/models/Assignment"; // the one you're using
-import Project from "@/models/Project";
 import User from "@/models/User";
 import Assignment from "@/models/Assignment";
 
@@ -18,7 +17,7 @@ export async function GET(req: NextRequest) {
     if (!auth) return NextResponse.json({ error: "No token" }, { status: 401 });
     const token = auth.replace("Bearer ", "");
 
-    const payload = jwt.verify(token, JWT_SECRET) as any;
+    const payload = jwt.verify(token, JWT_SECRET) as { role: string };
     if (payload.role !== 'manager') {
       return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
     }
@@ -68,7 +67,7 @@ export async function GET(req: NextRequest) {
         role: engineer.role,
         skills: engineer.skills,
         percent: utilization,
-        img: (engineer as any)?.img || null,
+        img: engineer?.img || null,
         seniority: engineer.seniority,
       };
     });
@@ -99,7 +98,7 @@ export async function GET(req: NextRequest) {
       engineerDepartment: typeof a.engineerId === 'object' && a.engineerId !== null && 'department' in a.engineerId ? a.engineerId.department : "",
       engineerAvatar: typeof a.engineerId === 'object' && a.engineerId !== null && 'img' in a.engineerId ? a.engineerId.img : null,
       projectId: typeof a.projectId === 'object' && a.projectId !== null && '_id' in a.projectId ? a.projectId._id : a.projectId,
-      isTentative: typeof (a as any).isTentative !== 'undefined' ? (a as any).isTentative : false,
+      isTentative: typeof a.isTentative !== 'undefined' ? a.isTentative : false,
     }));
 
     return NextResponse.json({
@@ -120,16 +119,16 @@ export async function GET(req: NextRequest) {
   }
 }
 
-function isSameDay(d1: Date, d2: Date) {
-  return d1.getFullYear() === d2.getFullYear() &&
-         d1.getMonth() === d2.getMonth() &&
-         d1.getDate() === d2.getDate();
-}
+// function isSameDay(d1: Date, d2: Date) {
+//   return d1.getFullYear() === d2.getFullYear() &&
+//          d1.getMonth() === d2.getMonth() &&
+//          d1.getDate() === d2.getDate();
+// }
 
-// Helper to compare only the date part (ignoring time)
-function isDateInRange(date: Date, start: Date, end: Date) {
-  const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
-  const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-  const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
-  return s <= d && d <= e;
-} 
+// // Helper to compare only the date part (ignoring time)
+// function isDateInRange(date: Date, start: Date, end: Date) {
+//   const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+//   const s = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+//   const e = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+//   return s <= d && d <= e;
+// } 

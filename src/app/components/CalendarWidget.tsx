@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { addDays, format, isWithinInterval, startOfMonth, endOfMonth, isToday, isWeekend } from "date-fns";
 import { useMemo, useState } from "react";
+import Image from "next/image";
 
 interface Assignment {
   _id: string;
@@ -142,7 +143,13 @@ export default function CalendarTimeline({ assignments = [] }: { assignments?: A
                 {a.engineer && (
                   <Avatar className="w-7 h-7">
                     {a.engineerAvatar ? (
-                      <img src={a.engineerAvatar} alt={a.engineer} />
+                       <Image
+                       src={a.engineerAvatar}
+                       alt={a.engineer}
+                       width={32}           // Customize width
+                       height={32}          // Customize height
+                       className="rounded-full object-cover" // Optional styling
+                     />
                     ) : (
                       <AvatarFallback>{a.engineer[0]}</AvatarFallback>
                     )}

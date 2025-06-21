@@ -52,8 +52,8 @@ export default function LoginPage() {
         // Fallback for any other roles
         router.push("/dashboard");
       }
-    } catch (err: any) {
-      setError(err.message || "Login failed");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Login failed");
     } finally {
       setLoading(false);
     }

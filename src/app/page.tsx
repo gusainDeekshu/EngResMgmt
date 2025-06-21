@@ -204,7 +204,7 @@ export default function Home() {
                 </div>
                 <p className="text-gray-600 mb-4">Rated by 500+ engineering teams</p>
                 <div className="text-sm text-gray-500">
-                  "GeekyAnts transformed how we manage our engineering resources. Highly recommended!"
+                  {'"'}GeekyAnts transformed how we manage our engineering resources. Highly recommended!{'"'}
                 </div>
               </div>
             </div>
