@@ -32,6 +32,19 @@ A comprehensive web application for managing engineering resources, project assi
 - **UI Components**: shadcn/ui, Radix UI
 - **Styling**: Tailwind CSS
 
+## Development Approach & AI Tooling
+
+This project was developed using a combination of traditional coding and AI-powered tools to accelerate development and improve code quality. Here's a breakdown of the tools used:
+
+### AI-Powered Development Environment
+- **Cursor IDE**: An AI-first code editor that integrates AI capabilities directly into the development workflow. It was used for code generation, refactoring, and understanding complex codebases.
+
+### AI Models & Tools
+- **Google Gemini Studio**: Leveraged for its powerful multimodal capabilities and large context window. It helped in generating complex components, brainstorming application architecture, and creating documentation.
+- **ChatGPT**: Utilized for quick code snippets, debugging assistance, and generating boilerplate code.
+
+This approach of combining human expertise with AI assistance allowed for rapid prototyping, efficient development, and a focus on building high-quality features.
+
 ## Prerequisites
 
 - Node.js 18+ 
