@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.connectToDatabase = connectToDatabase;
 var mongoose_1 = require("mongoose");
-var MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/engineering-resource-mgmt';
+var MONGODB_URI = process.env.NEXT_PUBLIC_MONGODB_TOKEN || 'mongodb://localhost:27017/engineering-resource-mgmt';
 if (!MONGODB_URI) {
     throw new Error('Please define the MONGODB_URI environment variable');
 }

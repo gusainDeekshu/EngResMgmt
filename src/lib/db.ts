@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
+import 'dotenv/config';
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/engineering-resource-mgmt';
+const MONGODB_URI = process.env.NEXT_PUBLIC_MONGODB_TOKEN || 'mongodb://localhost:27017/engineering-resource-mgmt';
 
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');

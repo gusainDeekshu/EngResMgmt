@@ -322,6 +322,7 @@ async function seed() {
   ]);
   
 
+  console.log("Seed data inserted!",process.env.NEXT_PUBLIC_JWT_SECRET);
   console.log("Seed data inserted!");
   mongoose.connection.close();
 }

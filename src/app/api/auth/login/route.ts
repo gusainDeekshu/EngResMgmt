@@ -4,7 +4,7 @@ import bcrypt from "bcryptjs";
 import User from "@/models/User";
 import { connectToDatabase } from "@/lib/db";
 
-const JWT_SECRET = process.env.JWT_SECRET || "changeme";
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "changeme";
 
 export async function POST(req: NextRequest) {
   await connectToDatabase();

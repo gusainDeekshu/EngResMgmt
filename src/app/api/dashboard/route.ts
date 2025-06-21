@@ -8,7 +8,7 @@ import User from "@/models/User";
 import Assignment from "@/models/Assignment";
 
 
-const JWT_SECRET = process.env.JWT_SECRET || "changeme";
+const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "changeme";
 
 export async function GET(req: NextRequest) {
   try {
