@@ -21,7 +21,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="text-2xl font-bold text-blue-600">GeekyAnts</div>
+              <div className="text-2xl font-bold text-blue-600">BeastDrive</div>
             </div>
             <div className="flex items-center space-x-4">
               <Link href="/login">
@@ -161,7 +161,7 @@ export default function Home() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-6">
-                Why Choose GeekyAnts?
+                Why Choose BeastDrive?
               </h2>
               <div className="space-y-6">
                 <div className="flex items-start gap-4">
@@ -204,7 +204,7 @@ export default function Home() {
                 </div>
                 <p className="text-gray-600 mb-4">Rated by 500+ engineering teams</p>
                 <div className="text-sm text-gray-500">
-                  {'"'}GeekyAnts transformed how we manage our engineering resources. Highly recommended!{'"'}
+                  {'"'}BeastDrive transformed how we manage our engineering resources. Highly recommended!{'"'}
                 </div>
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <div className="text-2xl font-bold text-blue-400 mb-4">GeekyAnts</div>
+              <div className="text-2xl font-bold text-blue-400 mb-4">BeastDrive</div>
               <p className="text-gray-400">
                 Streamlining engineering resource management for modern teams.
               </p>
@@ -273,7 +273,7 @@ export default function Home() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 GeekyAnts. All rights reserved.</p>
+            <p>&copy; 2024 BeastDrive. All rights reserved.</p>
           </div>
         </div>
       </footer>

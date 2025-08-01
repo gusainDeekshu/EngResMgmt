@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { connectToDatabase } from "@/lib/db";
 import Assignment from "@/models/Assignment";
 import User from "@/models/User";
+import Project from "@/models/Project"; 
 
 const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET || "changeme";
 

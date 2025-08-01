@@ -12,7 +12,8 @@ import {
   Clock,
   CheckCircle,
   Menu,
-  X
+  X,
+  Ticket
 } from "lucide-react";
 import { Quicksand } from 'next/font/google';
 import { useState } from "react";
@@ -33,6 +34,26 @@ const engineerNavLinks = [
     name: "My Profile", 
     href: "/profile", 
     icon: User,
+    description: "Update my skills and preferences",
+    active: true
+  },
+  { 
+    name: "Invoices", 
+    href: "/invoices", 
+    icon: Ticket,
+    description: "Update my skills and preferences",
+    active: true
+  },{ 
+    name: "Import", 
+    href: "/import", 
+    icon: Ticket,
+    description: "Update my skills and preferences",
+    active: true
+  },
+  { 
+    name: "Orders", 
+    href: "/orders", 
+    icon: Ticket,
     description: "Update my skills and preferences",
     active: true
   },
@@ -108,7 +129,7 @@ export default function EngineerSidebar() {
         </button>
 
         <div className="text-2xl font-bold mb-8 ms-4 tracking-tight">
-          GeekyAnts
+          BeastDrive
         </div>
         
         {/* User Info */}
@@ -191,7 +212,7 @@ export default function EngineerSidebar() {
         )}
         
         <div className="mt-auto pt-8 border-t border-gray-100 text-xs text-gray-400">
-          &copy; {new Date().getFullYear()} GeekyAnts
+          &copy; {new Date().getFullYear()} BeastDrive
         </div>
       </aside>
     </>

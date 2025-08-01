@@ -133,7 +133,7 @@ export default function ManagerSidebar() {
         </button>
 
         <div className="text-2xl font-bold mb-8 ms-4 tracking-tight ">
-          GeekyAnts
+          BeastDrive
         </div>
         
         {/* User Info */}
@@ -249,7 +249,7 @@ export default function ManagerSidebar() {
         )}
         
         <div className="mt-auto pt-8 border-t border-gray-100 text-xs text-gray-400">
-          &copy; {new Date().getFullYear()} GeekyAnts
+          &copy; {new Date().getFullYear()} BeastDrive
         </div>
       </aside>
     </>

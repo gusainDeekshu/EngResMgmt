@@ -13,12 +13,12 @@ const AssignmentSchema: Schema<AssignmentData> = new Schema(
   {
     engineerId: {
       type: Schema.Types.ObjectId,
-      ref: "users",
+      ref: "User",
       required: true,
     },
     projectId: {
       type: Schema.Types.ObjectId,
-      ref: "projects",
+      ref: "Project",
       required: true,
     },
     allocationPercentage: { type: Number, required: true },
@@ -33,6 +33,6 @@ const AssignmentSchema: Schema<AssignmentData> = new Schema(
 );
 
 const AssignmentModel =
-  mongoose.models.assignments || mongoose.model("assignments", AssignmentSchema);
+  mongoose.models.Assignment || mongoose.model("Assignment", AssignmentSchema);
 
 export default AssignmentModel;

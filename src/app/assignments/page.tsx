@@ -52,6 +52,7 @@ export default function AssignmentsPage() {
   const handleAdd = async (data: any) => {
     setOpen(false);
     setEditIndex(null);
+    console.log(data, "--data");
     const payload = {
       projectId: data.projectId,
       engineerId: data.engineerId,
@@ -76,6 +77,8 @@ export default function AssignmentsPage() {
 
   const handleEditSubmit = async (data: any) => {
     if (editIndex === null) return;
+
+    console.log(data, "--data");
     setOpen(false);
     const id = assignmentIds[editIndex];
     const payload = {

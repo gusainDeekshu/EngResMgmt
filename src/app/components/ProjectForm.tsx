@@ -28,13 +28,13 @@ export default function ProjectForm({ onSubmit, initial }: { onSubmit: (data: an
         <label className="block text-sm font-medium mb-1">Description</label>
         <textarea 
           className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 min-h-[60px] resize-none"
-          {...register("description")}
+          {...register("description",{ required: true })}
         />
       </div>
       <div className="flex gap-2">
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1">Start Date</label>
-          <Input type="date" {...register("start", { required: true })} />
+          <Input type="date"  {...register("start", { required: true })} />
         </div>
         <div className="flex-1">
           <label className="block text-sm font-medium mb-1">End Date</label>
@@ -43,7 +43,7 @@ export default function ProjectForm({ onSubmit, initial }: { onSubmit: (data: an
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Required Skills (comma separated)</label>
-        <Input {...register("requiredSkills")} />
+        <Input {...register("requiredSkills",{ required: true })} />
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Team Size</label>
@@ -52,7 +52,7 @@ export default function ProjectForm({ onSubmit, initial }: { onSubmit: (data: an
       </div>
       <div>
         <label className="block text-sm font-medium mb-1">Status</label>
-        <Select {...register("status")}
+        <Select {...register("status",{ required: true })}
           defaultValue={initial?.status || "planning"}
           onValueChange={val => {
             // react-hook-form workaround for controlled Select
@@ -68,7 +68,7 @@ export default function ProjectForm({ onSubmit, initial }: { onSubmit: (data: an
             <SelectItem value="completed">Completed</SelectItem>
           </SelectContent>
         </Select>
-        <input type="hidden" {...register("status")} />
+        <input type="hidden" {...register("status",{ required: true })} />
       </div>
       <Button type="submit" className="mt-4" disabled={isSubmitting}>
         {isSubmitting ? "Saving..." : "Save Project"}

@@ -14,7 +14,7 @@ export default function Sidebar() {
   const { user, logout } = useAuth();
   return (
     <aside className="w-64 bg-white border-r border-gray-200 flex flex-col p-6 gap-4 shadow-sm">
-      <div className="text-2xl font-bold mb-8 tracking-tight">GeekyAnts</div>
+      <div className="text-2xl font-bold mb-8 tracking-tight">BeastDrive</div>
       <nav className="flex flex-col gap-2">
         {navLinks.map((link) => (
           <Link
@@ -36,7 +36,7 @@ export default function Sidebar() {
         </Button>
       )}
       <div className="mt-auto pt-8 border-t border-gray-100 text-xs text-gray-400">
-        &copy; {new Date().getFullYear()} GeekyAnts
+        &copy; {new Date().getFullYear()} BeastDrive
       </div>
     </aside>
   );

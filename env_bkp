@@ -1,2 +1,8 @@
-NEXT_PUBLIC_MONGODB_TOKEN="mongodb+srv://geekyant:geekyant@cluster0.zqz7q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
-NEXT_PUBLIC_JWT_SECRET="befeujhgierbbhbdvj"
+NEXT_PUBLIC_MONGODB_TOKEN="mongodb://root:root123@127.0.0.1:27017/engineering-resource-mgmt?authSource=admin"
+
+NEXT_PUBLIC_JWT_SECRET="sf"
+
+
+NEXT_PUBLIC_API_BASE_URL=http://localhost:3000
+NEXT_PUBLIC_BACKEND_API_BASE_URL=http://localhost:5000
+NEXT_PUBLIC_INTERNAL_API_KEY="d4a6b2c8-a1e7-eeefweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeedcvdzrdbehehtrj5j5j4-9c3d-8e5f6a9b1c7d-super-secret"

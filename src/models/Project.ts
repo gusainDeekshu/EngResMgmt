@@ -28,5 +28,5 @@ const ProjectSchema: Schema = new Schema({
   managerId: { type: Schema.Types.ObjectId, ref: 'User' },
 });
 
-const ProjectModel = mongoose.models.projects || mongoose.model("projects", ProjectSchema);
+const ProjectModel = mongoose.models.Project || mongoose.model("Project", ProjectSchema);
 export default ProjectModel;
