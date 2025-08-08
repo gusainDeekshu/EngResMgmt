@@ -1,13 +1,12 @@
 // src/app/admin/import/page.tsx
-'use client'; // This directive MUST be at the top for client-side interactivity.
+'use client'; 
 
 import { useState, ChangeEvent, FormEvent, useRef } from 'react';
 import axios from 'axios';
 import { toast } from 'sonner';
 import { Upload, File, X, CheckCircle, AlertCircle, AlertTriangle, Eye } from 'lucide-react';
-import * as XLSX from 'xlsx'; // Import the xlsx library for client-side parsing
+import * as XLSX from 'xlsx';
 
-// Import all the shadcn/ui components we need
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -15,23 +14,24 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-// Interface for the final import result from the server
 interface IImportResult {
   email: string;
   status: 'success' | 'skipped' | 'failed';
   reason: string;
 }
 
-// Interface for the preview data parsed on the client
+// ADDED: paymentDate to the preview interface
 interface IPreviewData {
   fullName: string;
   email: string;
   phoneNumber: string;
   amountPaid: number;
-  status: string;
+  paymentDate: string; // <-- ADDED
+  paymentStatus: string;
+  fulfillmentStatus: string;
   paymentMethod: string;
   razorpayPaymentId?: string;
-  gstNumber?: string; // Add the optional gstNumber
+  gstNumber?: string;
 }
 
 export default function ImportUsersPage() {
@@ -56,29 +56,34 @@ export default function ImportUsersPage() {
       setResults([]);
       setFinalMessage('');
 
-      // Parse the file for preview
       const reader = new FileReader();
       reader.onload = (event) => {
         try {
           const data = event.target?.result;
-          const workbook = XLSX.read(data, { type: 'binary' });
+          const workbook = XLSX.read(data, { type: 'binary', cellDates: true }); // Use cellDates for better parsing
           const sheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[sheetName];
           
-          // This robust method manually maps columns by their order, ignoring header names.
+          // CHANGED: Updated header mapping to include paymentDate
           const json: IPreviewData[] = XLSX.utils.sheet_to_json(worksheet, {
-            header: [ // Define the exact keys we want in our object based on column order
+            header: [
               'fullName', 'email', 'phoneNumber', 'amountPaid', 
-              'status', 'paymentMethod', 'razorpayPaymentId', 'gstNumber'
+              'paymentDate', 'paymentStatus', 'fulfillmentStatus', 'paymentMethod', 
+              'razorpayPaymentId', 'gstNumber'
             ],
-            range: 1 // IMPORTANT: This tells the parser to skip the header row (row 0).
+            range: 1 // Skip the header row
           });
 
-          setPreviewData(json);
+          // Format the date for display
+          const formattedPreview = json.map(row => ({
+            ...row,
+            paymentDate: row.paymentDate ? new Date(row.paymentDate).toLocaleDateString('en-CA') : 'N/A' // YYYY-MM-DD format
+          }));
+          setPreviewData(formattedPreview);
 
         } catch (err) {
             console.error("Error parsing file:", err);
-            toast.error("Failed to read file", { description: "The selected file might be corrupted or in an invalid format."});
+            toast.error("Failed to read file", { description: "The selected file might be corrupted."});
             setPreviewData([]);
         }
       };
@@ -92,14 +97,14 @@ export default function ImportUsersPage() {
     setResults([]);
     setFinalMessage('');
     if (fileInputRef.current) {
-      fileInputRef.current.value = ''; // Reset the input field so the same file can be re-selected
+      fileInputRef.current.value = '';
     }
   };
   
   const handleUpload = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!file) {
-      toast.warning('No file selected', { description: 'Please choose a file to import before uploading.' });
+      toast.warning('No file selected', { description: 'Please choose a file to import.' });
       return;
     }
 
@@ -123,7 +128,7 @@ export default function ImportUsersPage() {
       toast.success('Import Complete', { description: response.data.message || 'The import process has finished.' });
       setResults(response.data.results || []);
       setFinalMessage(response.data.message);
-      setPreviewData([]); // Clear the preview data after successful upload
+      setPreviewData([]);
 
     } catch (error: any) {
       console.error('File upload failed:', error);
@@ -135,7 +140,6 @@ export default function ImportUsersPage() {
     }
   };
   
-  // Helper component to render the correct icon based on import status
   const StatusIcon = ({ status }: { status: IImportResult['status'] }) => {
     switch (status) {
       case 'success': return <CheckCircle className="h-5 w-5 text-green-500" />;
@@ -153,8 +157,9 @@ export default function ImportUsersPage() {
             <Upload className="h-6 w-6" />
             Bulk User & Order Importer
           </CardTitle>
+          {/* CHANGED: Updated description with new column order */}
           <CardDescription>
-            Step 1: Upload Excel file. Columns must be in this order: <strong>fullName, email, phoneNumber, amountPaid, status, paymentMethod, razorpayPaymentId, gstNumber (optional)</strong>.
+            Step 1: Upload Excel file. Columns must be in this exact order: <strong>fullName, email, phoneNumber, amountPaid, paymentDate, paymentStatus, fulfillmentStatus, paymentMethod, razorpayPaymentId (opt), gstNumber (opt)</strong>.
           </CardDescription>
         </CardHeader>
 
@@ -211,7 +216,6 @@ export default function ImportUsersPage() {
         </form>
       </Card>
       
-      {/* Data Preview Section */}
       {previewData.length > 0 && (
         <Card className="max-w-6xl mx-auto">
             <CardHeader>
@@ -226,15 +230,15 @@ export default function ImportUsersPage() {
             <CardContent>
                 <div className="relative max-h-[400px] overflow-auto border">
                     <Table>
+                        {/* CHANGED: Updated table headers for preview */}
                         <TableHeader className="sticky top-0 bg-background">
                             <TableRow>
                                 <TableHead>Full Name</TableHead>
                                 <TableHead>Email</TableHead>
-                                <TableHead>Phone</TableHead>
-                                <TableHead>Method</TableHead>
-                                <TableHead>Razorpay ID</TableHead>
-                                <TableHead>GST Number</TableHead>
-                                <TableHead>Status</TableHead>
+                                <TableHead>Payment Date</TableHead>
+                                <TableHead>Amount Paid</TableHead>
+                                <TableHead>Payment Status</TableHead>
+                                <TableHead>Fulfillment</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
@@ -242,11 +246,10 @@ export default function ImportUsersPage() {
                                 <TableRow key={index}>
                                     <TableCell>{row.fullName}</TableCell>
                                     <TableCell>{row.email}</TableCell>
-                                    <TableCell>{row.phoneNumber}</TableCell>
-                                    <TableCell>{row.paymentMethod}</TableCell>
-                                    <TableCell>{row.razorpayPaymentId || 'N/A'}</TableCell>
-                                    <TableCell>{row.gstNumber || 'N/A'}</TableCell>
-                                    <TableCell>{row.status}</TableCell>
+                                    <TableCell>{row.paymentDate}</TableCell>
+                                    <TableCell>{row.amountPaid}</TableCell>
+                                    <TableCell>{row.paymentStatus}</TableCell>
+                                    <TableCell>{row.fulfillmentStatus}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
@@ -256,8 +259,7 @@ export default function ImportUsersPage() {
         </Card>
       )}
 
-      {/* Final Results Section */}
-      {results.length > 0 && (
+{results.length > 0 && (
         <Card className="max-w-6xl mx-auto">
           <CardHeader>
             <CardTitle>Import Report</CardTitle>
@@ -293,7 +295,7 @@ export default function ImportUsersPage() {
             </Table>
           </CardContent>
         </Card>
-      )}
-    </main>
+      )}   </main>
   );
 }
+    

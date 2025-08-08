@@ -10,7 +10,7 @@ import { SidebarWrapper } from "./components/SidebarWrapper";
 
 export const metadata: Metadata = {
   title: "Engineering Resource Management",
-  description: "Manage engineering team assignments and capacity.",
+  description: "Manage  team assignments and capacity.",
 };
 
 export default function RootLayout({

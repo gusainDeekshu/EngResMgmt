@@ -1,36 +1,15 @@
-// file: src/store/order-store.ts
-
+// store/order-store.ts
 import { create } from 'zustand';
-import { getClient, postClient } from '@/lib/api-client'; // Assuming postClient exists in api-client
+import { getClient } from '@/lib/api-client';
+import { Order, Pagination } from '@/types/orders';
 
-// --- Type Definitions ---
-interface Order {
-  _id: string;
-  confirmationId: string;
-  amount: number;
-  amountPaid : number;
-  currency: string;
-  status: 'pending_payment' | 'paid' | 'receipt_sent' | 'ticket_sent' | 'completed' | 'cancelled' | 'failed';
-  createdAt: string;
-  user: { // Populated user data
-    _id: string;
-    fullName: string;
-    email: { address: string };
-  };
-}
 
-interface Pagination {
-  currentPage: number;
-  totalPages: number;
-  totalItems: number;
-}
 
 interface Filters {
   search: string;
-  status: string;
+  status: string; // This will now filter by fulfillmentStatus
 }
 
-// --- Zustand Store State and Actions ---
 interface OrderState {
   orders: Order[];
   pagination: Pagination;
@@ -41,6 +20,7 @@ interface OrderState {
   fetchOrders: () => Promise<void>;
   setFilters: (newFilters: Partial<Filters>) => void;
   setPage: (page: number) => void;
+  updateOrderInList: (order: Order) => void; // The new action for real-time updates
 }
 
 export const useOrderStore = create<OrderState>((set, get) => ({
@@ -53,12 +33,17 @@ export const useOrderStore = create<OrderState>((set, get) => ({
 
   // --- Main Fetching Action ---
   fetchOrders: async () => {
-    set({ isLoading: true, error: null });
+    // To prevent flashes of loading on real-time updates, only set loading if there are no orders
+    if (get().orders.length === 0) {
+      set({ isLoading: true });
+    }
+    set({ error: null });
+    
     const { filters, pagination } = get();
 
     const params = new URLSearchParams({
       page: pagination.currentPage.toString(),
-      limit: '10',
+      limit: '15', // Using a slightly larger page size
       ...(filters.search && { search: filters.search }),
       ...(filters.status && { status: filters.status }),
     });
@@ -79,9 +64,10 @@ export const useOrderStore = create<OrderState>((set, get) => ({
   setFilters: (newFilters: Partial<Filters>) => {
     set(state => ({
       filters: { ...state.filters, ...newFilters },
-      pagination: { ...state.pagination, currentPage: 1 }
+      // Reset to page 1 whenever a filter changes
+      pagination: { ...state.pagination, currentPage: 1 } 
     }));
-    get().fetchOrders(); // Fetch immediately after filter change
+    // We will let the useEffect on the page trigger the fetch
   },
 
   // --- Action to Change Page ---
@@ -89,7 +75,17 @@ export const useOrderStore = create<OrderState>((set, get) => ({
     const { pagination } = get();
     if (page > 0 && page <= pagination.totalPages) {
       set(state => ({ pagination: { ...state.pagination, currentPage: page } }));
-      get().fetchOrders();
+      // Let the useEffect on the page trigger the fetch
     }
+  },
+
+  // --- The new action for handling real-time SSE updates ---
+  updateOrderInList: (updatedOrder: Order) => {
+    set((state) => ({
+      orders: state.orders.map((order) =>
+        // If the ID matches, replace the old order with the new one from the server
+        order._id === updatedOrder._id ? { ...order, ...updatedOrder } : order
+      ),
+    }));
   },
 }));

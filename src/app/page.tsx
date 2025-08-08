@@ -41,10 +41,10 @@ export default function Home() {
           <div className="mb-8">
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 mb-6">
               Streamline Your
-              <span className="text-blue-600"> Engineering Team</span>
+              <span className="text-blue-600"> Team</span>
             </h1>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-              Efficiently manage engineering resources, track project assignments, and optimize team utilization with our comprehensive resource management platform.
+              Efficiently manage resources, track project assignments, and optimize team utilization with our comprehensive resource management platform.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link href="/login">

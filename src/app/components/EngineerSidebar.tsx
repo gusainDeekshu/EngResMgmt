@@ -38,8 +38,8 @@ const engineerNavLinks = [
     active: true
   },
   { 
-    name: "Invoices", 
-    href: "/invoices", 
+    name: "Tickets", 
+    href: "/tickets", 
     icon: Ticket,
     description: "Update my skills and preferences",
     active: true
