@@ -50,9 +50,7 @@ export const useProfileStore = create<ProfileState>((set) => ({
     set({ loading: true, error: null });
     try {
       // Use the new putClient function
-      const response = await putClient("/api/auth/profile", dataToUpdate);
       
-      set({ profile: response.user, loading: false });
       
       alert("Profile updated successfully!");
 

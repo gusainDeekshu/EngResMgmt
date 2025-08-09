@@ -1,0 +1,9 @@
+version: 2
+authtoken: 30nAyduXqMaB1rISQveR3hP7R4j_7AbQoPMinYLwQAdpHMRzq # Add your authtoken here
+tunnels:
+  frontend:
+    proto: http
+    addr: 3000
+  backend:
+    proto: http
+    addr: 5000

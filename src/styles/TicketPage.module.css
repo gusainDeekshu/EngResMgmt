@@ -1,0 +1,117 @@
+/* src/styles/TicketPage.module.css */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  background-color: #f0f2f5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.main {
+  width: 100%;
+  max-width: 450px;
+}
+
+/* App Banner Styles */
+.appBanner {
+  background-color: #ffffff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.bannerTitle {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  color: #1c1c1e;
+}
+
+.bannerSubtitle {
+  margin: 0 0 1.5rem 0;
+  color: #6c6c70;
+}
+
+.storeButtons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Ticket Card Styles */
+.ticketCard {
+  background: linear-gradient(135deg, #4c0f59, #3b2f8a);
+  color: white;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.header {
+  text-align: center;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
+}
+
+.header h1 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 1px;
+}
+
+.header span {
+  font-size: 1rem;
+  opacity: 0.8;
+  text-transform: uppercase;
+}
+
+.details {
+  margin: 1.5rem 0;
+}
+
+.detailItem {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.detailItem strong {
+  opacity: 0.8;
+  margin-right: 0.5rem;
+}
+
+.qrSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem 0;
+  padding: 1rem 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.3);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.qrCodeWrapper {
+    background-color: white;
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.readableCode {
+  font-size: 1.5rem;
+  font-weight: bold;
+  letter-spacing: 4px;
+  margin-top: 1rem;
+}
+
+.footer {
+  text-align: center;
+  opacity: 0.7;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+}

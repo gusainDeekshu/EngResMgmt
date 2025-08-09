@@ -3,8 +3,9 @@
 "use client"; // This directive is essential!
 
 import Image from 'next/image';
-// --- FIX 1: Change the import to a named import ---
-import { QRCodeSVG } from 'qrcode.react'; 
+import { QRCodeSVG } from 'qrcode.react';
+// --- THIS IS THE MISSING LINE THAT NEEDS TO BE ADDED ---
+import styles from '../../../styles/TicketPage.module.css'; 
 
 // --- DATA SHAPES (Can be imported from another file) ---
 interface VenueDetails {
@@ -37,11 +38,11 @@ export default function TicketView({ ticket }: PageProps) {
           <h2 className={styles.bannerTitle}>Get the Full Experience</h2>
           <p className={styles.bannerSubtitle}>Open this ticket in the app for easy check-in and event updates.</p>
           <div className={styles.storeButtons}>
-            <a href="YOUR_APP_STORE_URL" target="_blank" rel="noopener noreferrer">
-              <Image src="/app-store-badge.svg" alt="Download on the App Store" width={150} height={50} priority />
+            <a href="https://apps.apple.com/in/app/beastdrive/id6749003932" target="_blank" rel="noopener noreferrer">
+              <Image src="/app-store-badge.png" alt="Download on the App Store" width={150} height={50} priority />
             </a>
-            <a href="YOUR_GOOGLE_PLAY_URL" target="_blank" rel="noopener noreferrer">
-              <Image src="/google-play-badge.png" alt="Get it on Google Play" width={168} height={50} priority />
+            <a href="https://play.google.com/store/apps/details?id=com.anonymous.BeastDrivePrototype" target="_blank" rel="noopener noreferrer">
+              <Image src="/Google_Play_Store_badge.png" alt="Get it on Google Play" width={168} height={50} priority />
             </a>
           </div>
         </div>
@@ -70,7 +71,6 @@ export default function TicketView({ ticket }: PageProps) {
 
           <div className={styles.qrSection}>
             <div className={styles.qrCodeWrapper}>
-              {/* --- FIX 2: Update the component name to match the import --- */}
               <QRCodeSVG
                 value={ticket.qrCodeData}
                 size={200}

@@ -1,0 +1,11 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appIDs": ["T78HW3NU88.com.anonymous.BeastDrivePrototype"],
+        "paths": ["/tickets-show/*"]
+      }
+    ]
+  }
+}

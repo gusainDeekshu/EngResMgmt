@@ -22,9 +22,9 @@ interface TicketDetails {
 }
 
 interface PageParams {
-  params: {
+  params: Promise<{
     orderId: string;
-  };
+  }>;
 }
 
 // --- ASYNCHRONOUS DATA FETCHING FUNCTION ---
@@ -50,7 +50,7 @@ async function getTicketDetails(orderId: string): Promise<TicketDetails | null> 
 
 // --- DYNAMIC METADATA FUNCTION (Replaces <Head>) ---
 export async function generateMetadata({ params }: PageParams): Promise<Metadata> {
-  const ticket = await getTicketDetails(params.orderId);
+  const ticket = await getTicketDetails((await params).orderId);
 
   if (!ticket) {
     return {
@@ -66,7 +66,7 @@ export async function generateMetadata({ params }: PageParams): Promise<Metadata
 
 // --- THE MAIN PAGE (A REACT SERVER COMPONENT) ---
 export default async function TicketShowPage({ params }: PageParams) {
-  const { orderId } = params;
+  const { orderId } =await params;
   const ticket = await getTicketDetails(orderId);
 
   // If no ticket is found, render the built-in 404 page

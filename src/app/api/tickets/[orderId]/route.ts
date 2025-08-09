@@ -11,14 +11,15 @@ const secretKey = process.env.NEXT_PUBLIC_INTERNAL_API_KEY;
  */
 export async function GET(
     request: NextRequest,
-    { params }: { params: { orderId: string } }
+    
+    { params }: { params: Promise<{ orderId: string }> }
 ) {
     if (!backendUrl || !secretKey) {
         console.error("Server configuration error: Backend URL or API key is missing.");
         return NextResponse.json({ error: 'Server configuration error.' }, { status: 500 });
     }
 
-    const { orderId } = params;
+    const { orderId } = await params;
     if (!orderId) {
         return NextResponse.json({ error: 'Order ID is required.' }, { status: 400 });
     }

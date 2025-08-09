@@ -30,7 +30,7 @@ export interface Order {
   };
   // Add the ticketDetails here as it's part of a complete order object
   ticketDetails?: {
-    selectedVenue?: string;
+    selectedVenue?: { name: string; city: string; } | null;
     selectedDate?: string;
     ticketUrl?: string;
     ticketNumber?: string;
